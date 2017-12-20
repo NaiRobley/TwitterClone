@@ -13,10 +13,6 @@ router.route('/')
 
 router.route('/:tweetID')
   .get(validateParam(schemas.idSchema, 'tweetID'), tweetController.getTweet)
-  .put([verifyToken(), validateParam(schemas.idSchema, 'tweetID'), validateBody(schemas.tweetSchema)],
-    tweetController.replaceTweet)
-  .patch([verifyToken(), validateParam(schemas.idSchema, 'tweetID'), validateBody(schemas.tweetSchemaOptional)],
-    tweetController.updateTweet)
   .delete([verifyToken(), validateParam(schemas.idSchema, 'tweetID')],
     tweetController.deleteTweet);
 
