@@ -35,32 +35,6 @@ module.exports = {
     await user.save();
     res.status(201).json({ success: true, tweet: newTweet, message: 'Tweet sent successfully' });
   },
-  // Update a tweet (PATCH)
-  updateTweet: async (req, res) => {
-    const { tweetID } = req.value.params;
-    const newTweet = req.value.body;
-    // Find the tweet and check access
-    const tweet = await Tweet.findById(tweetID);
-    if (tweet){
-      const result = await Tweet.findByIdAndUpdate(tweetID, newTweet, { new: true });
-      res.status(200).json({ success: true, message: 'Tweet updated successfully' }); 
-    } else {
-      res.status(404).json({ success: false, message: 'Tweet does not exist or you do not have access to it' });
-    }
-  },
-  // Replace a tweet (PUT)
-  replaceTweet: async (req, res) => {
-    const { tweetID } = req.value.params;
-    const newTweet = req.value.body;
-    // Find the tweet and check access
-    const tweet = await Tweet.findById(tweetID);
-    if (tweet){
-      const result = await Tweet.findByIdAndUpdate(tweetID, newTweet, { new: true });
-      res.status(200).json({ success: true, message: 'Tweet updated successfully' });
-    } else {
-      res.status(404).json({ success: false, message: 'Tweet does not exist or you do not have access to it' });
-    }         
-  },
   // Delete a tweet
   deleteTweet: async (req, res) => {
     const { tweetID } = req.value.params;
