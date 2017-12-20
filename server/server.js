@@ -1,18 +1,17 @@
-'use strict';
+const express = require('express');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const config = require('../config');
+// Import the routes
+const userRoutes = require('./api/routes/userRoutes');
+const tweetRoutes = require('./api/routes/tweetRoutes');
 
-const express = require('express'),
-      logger = require('morgan'), 
-      mongoose = require('mongoose'), 
-      bodyParser = require('body-parser'), 
-      app = express(),
-      config = require('../config'),
-      // Import the routes
-      userRoutes = require('./api/routes/userRoutes'),
-      tweetRoutes = require('./api/routes/tweetRoutes');
+const app = express();
 
 // Connect to mongoose
 mongoose.Promise = global.Promise;
-mongoose.connect(config[process.env.NODE_ENV]['DATABASE'], { useMongoClient: true });
+mongoose.connect(config[process.env.NODE_ENV].DATABASE, { useMongoClient: true });
 
 // Middleware
 app.use(logger('dev'));
@@ -24,26 +23,26 @@ app.use('/api/tweets/', tweetRoutes);
 
 // Catch 404 Errors and forward them to error handlers
 app.use((req, res, next) => {
-    const err = new Error('Not found');
-    err.status = 404;
-    next(err);
+  const err = new Error('Not found');
+  err.status = 404;
+  next(err);
 });
 
 // Error handler function
 app.use((err, req, res, next) => {
-    const error = app.get('env') === 'DEVELOPMENT' ? err : {};
-    const status = err.status || 500;
-    // Respond to client
-    res.status(status).json({
-        error: {
-            message: error.message
-        }
-    });
-    console.error(err);
+  const error = app.get('env') === 'DEVELOPMENT' ? err : {};
+  const status = err.status || 500;
+  // Respond to client
+  res.status(status).json({
+    error: {
+      message: error.message,
+    },
+  });
+  console.error(err);
 });
 
 // Start the server
-const port = config[process.env.NODE_ENV]['PORT'] || 3005;
+const port = config[process.env.NODE_ENV].PORT || 3005;
 app.listen(port, () => console.log(`Server is listening on port ${port}`));
 
 module.exports = app; // for testing
