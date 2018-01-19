@@ -1,2 +1,2 @@
-web: npm run prod
+web: npm run dev
 api: nodemon server/server.js
