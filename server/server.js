@@ -40,7 +40,11 @@ app.use((err, req, res, next) => {
   });
   console.error(err);
 });
-
+// Set up a default catch-all route that sends a welcome message in JSON
+// format
+app.get('*', (req, res) => {
+  res.status(200).json({message: "Welcome to Twitter Clone!"});
+});
 // Start the server
 const port = config[process.env.NODE_ENV].PORT || 3005;
 app.listen(port, () => console.log(`Server is listening on port ${port}`));
