@@ -24,7 +24,7 @@ module.exports = {
               role: user.role,
             };
             const token = generateToken(payload);
-            res.status(200).json({ id: user._id, username:user.username, token: token, success: true });
+            res.status(200).json({ id: user._id, username:user.username, token, success: true });
           }
         }
       }
@@ -36,10 +36,10 @@ module.exports = {
   },
   // Find matching instances of user
   getUsers: async (req, res) => {
-    const limit = req.query.limit || 5;
-    const offset = req.query.offset || 5;
+    // const limit = req.query.limit || 5;
+    // const offset = req.query.offset || 5;
     const users = await User.find({}, { password: 0 });
-    res.status(200).json({success: true, users: users});
+    res.status(200).json({ success: true, users });
   },
   // Create a new user
   registerUser: async (req, res) => {
@@ -50,7 +50,7 @@ module.exports = {
   // Find a single user by their username
   getUser: async (req, res) => {
     let { username } = req.value.params;
-    const [user] = await User.find({ username: username }, { password: 0 });
+    const [user] = await User.find({ username }, { password: 0 });
     res.status(200).json(user);
   },
   // Update user attributes (PATCH)
@@ -81,7 +81,7 @@ module.exports = {
     const { username } = req.value.params;
 
     const user = await User.findById(req.user.id);
-    const [userToBeFollowed] = await User.find({ username: username });
+    const [userToBeFollowed] = await User.find({ username });
     if ( userToBeFollowed.followers.indexOf(user._id) >= 0 || user.following.indexOf(userToBeFollowed._id) >= 0 ) {
       res.status(209).json({ success: false, message: 'You have already followed this user'});
     } else {
@@ -98,7 +98,7 @@ module.exports = {
     const { username } = req.value.params;
 
     const user = await User.findById(req.user.id);
-    const [userToBeUnfollowed] = await User.find({ username: username });
+    const [userToBeUnfollowed] = await User.find({ username });
 
     if ( userToBeUnfollowed.followers.indexOf(user._id) >= 0 && user.following.indexOf(userToBeUnfollowed._id) >= 0 ) {
       // Remove the user to be unfollowed from the user's following list
@@ -119,12 +119,12 @@ module.exports = {
   searchUser: async (req, res) => {
     const query = new RegExp(req.query.q, 'i');
     var users = await User.find({ username: query }, { password: 0 });
-    res.status(200).json({success: true, users: users});
+    res.status(200).json({success: true, users});
   },
   // Get a user's tweets
   userTweets: async (req, res) => {
     const { username } = req.value.params;
-    const [user] = await User.find({ username: username }).populate('tweets');
+    const [user] = await User.find({ username }).populate('tweets');
     res.status(200).json({ success: true, tweets: user.tweets });
   },
 };
