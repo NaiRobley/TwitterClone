@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 3000 8080
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start-dev"]
